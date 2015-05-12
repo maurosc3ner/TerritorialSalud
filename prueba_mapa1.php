@@ -207,7 +207,7 @@
 
     function addMarkers(geocodes)
     {
-        for(i=0; i<geocodes.length; i++)
+        for(i=0; i<(geocodes.length)-1; i++)
         {
             // Centra el mapa en la nueva ubicación
             
@@ -316,7 +316,7 @@
 							strokeOpacity: 0.1,
 							strokeWeight: 1,
 							fillColor: data[1][0],
-							fillOpacity: 0.1,
+							fillOpacity: 0.6,
 							}
 							var it = new google.maps.Polygon(polyOptions);
 							it.setMap(map);
@@ -382,7 +382,7 @@ Longitud: <input type="text" id="longitud" readonly/>
   <p>
 	<div id="dvImportSegments" class="fileupload ">
             <fieldset>
-                <legend>Select the CSV file to upload</legend>
+                <legend>Selecciona CSV a cargar</legend>
                 <input type="file" name="File Upload" id="txtFileUpload" accept=".csv" />
             </fieldset>
     </div>
