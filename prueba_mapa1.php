@@ -3,7 +3,9 @@
 <html lang="es">
 
 <head>
-<!--// dibujar poligonos http://www.birdtheme.org/useful/v3tool.html-->
+<!--// dibujar poligonos http://www.birdtheme.org/useful/v3tool.html
+http://www.gadm.org/download
+-->
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Georreferenciación Municipios de Caldas</title>
 
@@ -39,18 +41,15 @@
     </style>
 
 
-  <script type="text/javascript" src="lib/googleMaps.js?key=AIzaSyBY6UaYRhynH2rykKFYM_mLvKJ5kje5GxE&sensor=FALSE"></script> 
+  <!--<script type="text/javascript" src="lib/googleMaps.js?key=AIzaSyBY6UaYRhynH2rykKFYM_mLvKJ5kje5GxE&sensor=FALSE&libraries=visualization"></script> -->
   <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=es"></script>  -->
    <!--mapa de color  -->
-
-  <!--<script type="text/javascript"
-	  src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false">
-  </script>-->
+<script type="text/javascript"
+  src="lib/heatmaps.js?libraries=visualization&key=AIzaSyBY6UaYRhynH2rykKFYM_mLvKJ5kje5GxE&sensor=false"></script>
   
- <!-- <script type="text/javascript" src="lib/heatMap.js"></script>  -->
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js" type="text/javascript"></script>
+  <script src="lib/jquery.min.js" type="text/javascript"></script>
+  <script src="lib/jquery.csv-0.71.min.js" type="text/javascript"></script>
   <script type="text/javascript"> 
   
     
@@ -60,7 +59,6 @@
      */
 
     // Variables globales
-
     var map, geocoder;
 
     // Instancia del geocodificador
@@ -119,17 +117,49 @@
 		}
 	
 		
-	
+	var prueba_punto=[
+new google.maps.LatLng(5.059792,-75.491803),
+new google.maps.LatLng(5.059894,-75.492613),
+new google.maps.LatLng(5.059311,-75.493181),
+new google.maps.LatLng(5.060124,-75.493171),
+new google.maps.LatLng(5.059969,-75.493707),
+new google.maps.LatLng(5.059477,-75.493621),
+new google.maps.LatLng(5.059343,-75.493369),
+new google.maps.LatLng(5.059210,-75.493240),
+new google.maps.LatLng(5.059146,-75.493251),
+new google.maps.LatLng(5.059215,-75.493396),
+new google.maps.LatLng(5.059509,-75.494801),
+new google.maps.LatLng(5.061096,-75.495708),
+new google.maps.LatLng(5.060754,-75.496067),
+new google.maps.LatLng(5.061759,-75.497591),
+new google.maps.LatLng(5.069656,-75.522165),
+new google.maps.LatLng(5.069710,-75.522160),
+new google.maps.LatLng(5.069794,-75.522195),
+new google.maps.LatLng(5.069696,-75.522320),
+new google.maps.LatLng(5.069712,-75.522467),
+new google.maps.LatLng(5.069791,-75.522569),
+new google.maps.LatLng(5.069662,-75.522582),
+new google.maps.LatLng(5.069712,-75.522781),
+new google.maps.LatLng(5.069841,-75.522765),
+new google.maps.LatLng(5.069992,-75.522604),
+new google.maps.LatLng(5.069137,-75.522962),
+new google.maps.LatLng(5.068859,-75.523646),
+new google.maps.LatLng(5.069197,-75.524129),
+new google.maps.LatLng(5.069293,-75.527444),
+new google.maps.LatLng(5.067220,-75.527916),
+new google.maps.LatLng(5.069720,-75.529740),
+new google.maps.LatLng(5.071494,-75.528796)
+	];
 	// mapa de colores
-/*	
-	for (var i=0; i<=((myCoordinates.length)-1); i++){
+
+	//for (var i=0; i<=((myCoordinates.length)-1); i++){
 		var heatmap = new google.maps.visualization.HeatmapLayer({
-		  data: myCoordinates[i]
+		  data: prueba_punto
 		});
 		heatmap.setMap(map);
-	 }
-*/
-	///	
+	 //}
+
+	
 		
 		
 		//boton búsqueda}
@@ -321,6 +351,10 @@
 							var it = new google.maps.Polygon(polyOptions);
 							it.setMap(map);
 						
+						
+
+		
+
 		
 		
 
@@ -350,7 +384,9 @@
 </head>
 
 <body>
+<?php
 
+?>
 <h1>Georreferenciación Municipios de Caldas</h1>
 
 <div id="data">
@@ -374,9 +410,7 @@
 <div id="map"></div>
 Latitud: <input type="text" id="latitud" readonly/></br>
 Longitud: <input type="text" id="longitud" readonly/>
-<?php
 
-?>
 </body>
   <h1>Carga de Archivos</h1>
   <p>
