@@ -11,6 +11,15 @@ http://www.gadm.org/download
 
     <style type="text/css">
     
+	 #tabla_reporte_chikun
+    {
+       position:absolute;
+ top:77px;
+ left:644px;
+ right:0;
+    }
+    
+	
     #message
     {
         color: red;
@@ -117,6 +126,7 @@ http://www.gadm.org/download
 		}
 	
 		
+		/*
 	var prueba_punto=[
 new google.maps.LatLng(5.059792,-75.491803),
 new google.maps.LatLng(5.059894,-75.492613),
@@ -159,7 +169,7 @@ new google.maps.LatLng(5.071494,-75.528796)
 		heatmap.setMap(map);
 	 //}
 
-	
+	*/
 		
 		
 		//boton búsqueda}
@@ -285,6 +295,9 @@ new google.maps.LatLng(5.071494,-75.528796)
 	var contador_municipio=-1;
 	var municipio= new Array();
 	var array_Caja= new Array();
+	var array_chikungunya= new Array();
+							var it= new Array();
+							var objetoMunicipios= new Array();
 
 	
 	$(document).ready(function() {
@@ -338,36 +351,123 @@ new google.maps.LatLng(5.071494,-75.528796)
 							  }
 								
 			
+							array_chikungunya.push( data[2][1] );   //contiene el número de casos con chikungunya
+							var max=0; //indica el numero maximo sobre el cual se hará la medicion
+							for(var i=0;i<=((array_chikungunya.length)-1);i++) {
+								if(max < array_chikungunya[i]) 
+									max = array_chikungunya[i];
+							}
+							var color="green";    //segun le numero se da el color
+							var chikungunya_numero=((data[2][1])/max)*100;
+							if(chikungunya_numero>=75){
+								color="red";
+							}
+							if((chikungunya_numero>=50) && (chikungunya_numero< 75)){
+								color="yellow";
+							}
+							
+							if(chikungunya_numero<50){
+								color="green";
+							}
+							
+							
+
 							municipio[contador_municipio]= vector_Coordenadas_Mun ;
 							array_Caja.push( { contenido: data[2][0] } );
 							var polyOptions = {
-							path: municipio[contador_municipio],        //recibe un vector, en cada posicion hay un vector dentro de otro vector
-							strokeColor: data[0][0],
-							strokeOpacity: 0.1,
-							strokeWeight: 1,
-							fillColor: data[1][0],
-							fillOpacity: 0.6,
+								path: municipio[contador_municipio],        //recibe un vector, en cada posicion hay un vector dentro de otro vector
+								//strokeColor: data[0][0],
+								strokeColor: 'black',
+								strokeOpacity: 0.3,
+								strokeWeight: 1,
+								//fillColor: data[1][0],
+								fillColor: color,
+								fillOpacity: 0.6,
+								valorChicungunya: (data[2][1]),
+								nombre: (data[2][0])
 							}
-							var it = new google.maps.Polygon(polyOptions);
-							it.setMap(map);
+
+							it[contador_municipio] = new google.maps.Polygon(polyOptions);
+							it[contador_municipio].setMap(map);
+
+							
+								for (var i=0; i<((contador_municipio)); i++){
+									it[i].setMap(null);
+								}
+							/*	
+								var body = document.getElementsByTagName("body")[0];
+								var tabla   = document.createElement("table");
+								var tblBody = document.createElement("tbody");
+								var th = document.createElement("td");
+										var textoCelda = document.createTextNode("Municipio");
+										th.appendChild(textoCelda);
+										var th = document.createElement("td");
+										var textoCelda = document.createTextNode("Casos de Chikungunya");
+										th.appendChild(textoCelda);
+										
+								for (var i=0; i<=((contador_municipio)); i++){
+								       var hilera = document.createElement("tr");
+									   	
+										var celda = document.createElement("td");
+										var textoCelda = document.createTextNode("celda en la hilera "+i);
+									  
+								if(((it[i].valorChicungunya/max)*100)>=75){
+									
+									it[i].fillColor="red";
+								}
+								if(((it[i].valorChicungunya/max)*100) && (((it[i].valorChicungunya/max)*100)< 75)){
+									it[i].fillColor="yellow";
+								}
+							
+								if(((it[i].valorChicungunya/max)*100)<50){
+									it[i].fillColor="green";
+								}
+
+												
+								it[i].setMap(map);
+								     
+									      celda.appendChild(textoCelda);
+										hilera.appendChild(celda);
+								}
+				tblBody.appendChild(hilera);									
+				tabla.appendChild(tblBody);
+				body.appendChild(tabla);
+				  tabla.setAttribute("border", "1");
+				  */
+				  var tabla="<table border='1'><tr><th>Municipios</th><th>Casos de Chikungunya</th><th>Riesgo</th></tr>";
+				  for (var i=0; i<=((contador_municipio)); i++){
+								      
+									  
+								if(((it[i].valorChicungunya/max)*100)>=75){
+									
+									it[i].fillColor="red";
+								}
+								if(((it[i].valorChicungunya/max)*100) && (((it[i].valorChicungunya/max)*100)< 75)){
+									it[i].fillColor="yellow";
+								}
+							
+								if(((it[i].valorChicungunya/max)*100)<50){
+									it[i].fillColor="green";
+								}
+
+												
+								it[i].setMap(map);
+							tabla+=	 "<tr><td align='center'>"+it[i].nombre+"</td><td align='center'>"+it[i].valorChicungunya+"</td><td align='center' bgcolor="+"'"+it[i].fillColor+"'"+"</td><tr>";  
+									    
+								}
+							tabla+="</table>";
+							document.getElementById('tablas').innerHTML = tabla;
+							
+						var infowindow = new google.maps.InfoWindow();
+						for (var i=0; i<=((municipio.length)-1); i++){
 						
-						
+							google.maps.event.addListener(it[contador_municipio], 'click', function (evt) {
+							infowindow.setContent("<h2>"+array_Caja[i-1].contenido+"</h2>");
+							infowindow.open(map);
+							infowindow.setPosition(evt.latLng);
 
-		
-
-		
-		
-
-			 var infowindow = new google.maps.InfoWindow();
-			for (var i=0; i<=((municipio.length)-1); i++){
-				
-				google.maps.event.addListener(it, 'click', function (evt) {
-					infowindow.setContent("<h2>"+array_Caja[i-1].contenido+"</h2>");
-					infowindow.open(map);
-					infowindow.setPosition(evt.latLng);
-
-				});
-				}
+							});
+						}
 		
 						} else {
 							alert('No data to import!');
@@ -410,14 +510,16 @@ new google.maps.LatLng(5.071494,-75.528796)
 <div id="map"></div>
 Latitud: <input type="text" id="latitud" readonly/></br>
 Longitud: <input type="text" id="longitud" readonly/>
-
+<div id='tabla_reporte_chikun'>
+<font id='tablas'></font>
+</div>
 </body>
   <h1>Carga de Archivos</h1>
   <p>
 	<div id="dvImportSegments" class="fileupload ">
             <fieldset>
                 <legend>Selecciona CSV a cargar</legend>
-                <input type="file" name="File Upload" id="txtFileUpload" accept=".csv" />
+                <input type="file" name="File Upload" id="txtFileUpload" accept=".csv"/>
             </fieldset>
     </div>
   </p>
