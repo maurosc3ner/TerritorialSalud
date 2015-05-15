@@ -292,24 +292,23 @@ new google.maps.LatLng(5.071494,-75.528796)
         }
     }
 	
-	var contador_municipio=-1;
-	var municipio= new Array();
-	var array_Caja= new Array();
+	var contador_municipio=-1;   //variable que indica cuantos municipios se han cargado
+	var municipio= new Array(); //vector que contiene los municipios
+	var array_Caja= new Array();  //almacena el nombre de los municipios
 	var array_chikungunya= new Array();
-							var it= new Array();
-							var objetoMunicipios= new Array();
+	var it= new Array();  //contendra a un objeto con opciones para municipios
 
 	
 	$(document).ready(function() {
-		
 
 		// The event listener for the file upload
-		document.getElementById('txtFileUpload').addEventListener('change', upload, false);
-		document.getElementById('txtFileUpload').addEventListener('click', function(){
-		contador_municipio+=1;
-					
-	});
 
+	document.getElementById('txtFileUpload').addEventListener('change', upload, false);
+
+	
+
+	
+	
 
 	// Method that checks that the browser supports the HTML5 File API
 	function browserSupportFileUpload() {
@@ -320,8 +319,13 @@ new google.maps.LatLng(5.071494,-75.528796)
 
 		return isCompatible;
 	};
-
+			var ValidarExisteMunicipio= new Array();
+			
 		function upload(evt) {
+			var validaExistemunicipio_flag=false;
+			//alert(document.getElementById('txtFileUpload').value) ;
+					
+
 			if (!browserSupportFileUpload()) {
 				alert('The File APIs are not fully supported in this browser!');
 			} else {
@@ -332,7 +336,19 @@ new google.maps.LatLng(5.071494,-75.528796)
 				reader.onload = function(event) {
 						var csvData = event.target.result;
 						data = $.csv.toArrays(csvData);
-						if (data && data.length > 0) {
+						var v
+						for (i=0; i<ValidarExisteMunicipio.length; i++){
+							if((data[2][0])==ValidarExisteMunicipio[i]){
+							
+								validaExistemunicipio_flag=true; //si es true quiere decir que ya existe por lo tanto se omite el resultado
+							}
+						}
+						
+					
+						
+						if (data && data.length > 0 && !validaExistemunicipio_flag ) {
+								contador_municipio+=1;
+													
 							var concatena_Coordenadas_Mun="";
 							vector_Coordenadas_Mun= new Array();
 							vector_Coordenadas_lat= new Array();
@@ -372,7 +388,7 @@ new google.maps.LatLng(5.071494,-75.528796)
 							
 							
 
-							municipio[contador_municipio]= vector_Coordenadas_Mun ;
+							municipio[contador_municipio]= vector_Coordenadas_Mun ; //cada posicion de este vector contien las coordenadas
 							array_Caja.push( { contenido: data[2][0] } );
 							var polyOptions = {
 								path: municipio[contador_municipio],        //recibe un vector, en cada posicion hay un vector dentro de otro vector
@@ -386,6 +402,7 @@ new google.maps.LatLng(5.071494,-75.528796)
 								valorChicungunya: (data[2][1]),
 								nombre: (data[2][0])
 							}
+							ValidarExisteMunicipio.push((data[2][0]));  //Agrega elementos a un vector que tiene como funcion indicar si un municipio ya existe
 
 							it[contador_municipio] = new google.maps.Polygon(polyOptions);
 							it[contador_municipio].setMap(map);
@@ -394,69 +411,30 @@ new google.maps.LatLng(5.071494,-75.528796)
 								for (var i=0; i<((contador_municipio)); i++){
 									it[i].setMap(null);
 								}
-							/*	
-								var body = document.getElementsByTagName("body")[0];
-								var tabla   = document.createElement("table");
-								var tblBody = document.createElement("tbody");
-								var th = document.createElement("td");
-										var textoCelda = document.createTextNode("Municipio");
-										th.appendChild(textoCelda);
-										var th = document.createElement("td");
-										var textoCelda = document.createTextNode("Casos de Chikungunya");
-										th.appendChild(textoCelda);
-										
-								for (var i=0; i<=((contador_municipio)); i++){
-								       var hilera = document.createElement("tr");
-									   	
-										var celda = document.createElement("td");
-										var textoCelda = document.createTextNode("celda en la hilera "+i);
-									  
-								if(((it[i].valorChicungunya/max)*100)>=75){
-									
-									it[i].fillColor="red";
-								}
-								if(((it[i].valorChicungunya/max)*100) && (((it[i].valorChicungunya/max)*100)< 75)){
-									it[i].fillColor="yellow";
-								}
-							
-								if(((it[i].valorChicungunya/max)*100)<50){
-									it[i].fillColor="green";
-								}
-
-												
-								it[i].setMap(map);
-								     
-									      celda.appendChild(textoCelda);
-										hilera.appendChild(celda);
-								}
-				tblBody.appendChild(hilera);									
-				tabla.appendChild(tblBody);
-				body.appendChild(tabla);
-				  tabla.setAttribute("border", "1");
-				  */
-				  var tabla="<table border='1'><tr><th>Municipios</th><th>Casos de Chikungunya</th><th>Riesgo</th></tr>";
-				  for (var i=0; i<=((contador_municipio)); i++){
+						
+						var tabla="<table border='1'><tr><th>Municipios</th><th>Casos de Chikungunya</th><th>Riesgo</th></tr>";
+						for (var i=0; i<=((contador_municipio)); i++){
 								      
 									  
-								if(((it[i].valorChicungunya/max)*100)>=75){
-									
-									it[i].fillColor="red";
-								}
-								if(((it[i].valorChicungunya/max)*100) && (((it[i].valorChicungunya/max)*100)< 75)){
-									it[i].fillColor="yellow";
-								}
-							
-								if(((it[i].valorChicungunya/max)*100)<50){
-									it[i].fillColor="green";
-								}
+							if(((it[i].valorChicungunya/max)*100)>=75){
+								
+								it[i].fillColor="red";
+							}
+							if(((it[i].valorChicungunya/max)*100) && (((it[i].valorChicungunya/max)*100)< 75)){
+								it[i].fillColor="yellow";
+							}
+						
+							if(((it[i].valorChicungunya/max)*100)<50){
+								it[i].fillColor="green";
+							}
 
-												
-								it[i].setMap(map);
+											
+							it[i].setMap(map);
 							tabla+=	 "<tr><td align='center'>"+it[i].nombre+"</td><td align='center'>"+it[i].valorChicungunya+"</td><td align='center' bgcolor="+"'"+it[i].fillColor+"'"+"</td><tr>";  
 									    
-								}
-							tabla+="</table>";
-							document.getElementById('tablas').innerHTML = tabla;
+						}
+						tabla+="</table>";
+						document.getElementById('tablas').innerHTML = tabla;
 							
 						var infowindow = new google.maps.InfoWindow();
 						for (var i=0; i<=((municipio.length)-1); i++){
@@ -467,10 +445,25 @@ new google.maps.LatLng(5.071494,-75.528796)
 							infowindow.setPosition(evt.latLng);
 
 							});
+							/*
+							google.maps.event.addListener(it[contador_municipio], 'mouseover', function (evt) {
+								alert(it[contador_municipio].fillColor);
+							it[contador_municipio].fillColor= 'white';
+							it[contador_municipio].setMap(null);
+							it[contador_municipio].setMap(map);
+							});
+							
+							google.maps.event.addListener(it[contador_municipio], 'mouseout', function (evt) {
+								alert(it[contador_municipio].fillColor);
+							it[contador_municipio].fillColor= 'black';
+							it[contador_municipio].setMap(null);
+							it[contador_municipio].setMap(map);
+							});
+							*/
 						}
 		
 						} else {
-							alert('No data to import!');
+							//alert('No data to import!');
 						}
 					};
 					reader.onerror = function() {
@@ -478,6 +471,7 @@ new google.maps.LatLng(5.071494,-75.528796)
 					};
 			};
 		};
+		
 	});
 	
     </script>
